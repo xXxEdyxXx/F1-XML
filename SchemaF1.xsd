@@ -1,0 +1,176 @@
+<xs:schema elementFormDefault="qualified" targetNamespace="http://FormulaTeamsStua05.com/F1"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="F1" type="f1:F1Type" xmlns:f1="http://FormulaTeamsStua05.com/F1">
+        <xs:key name="DriverNumberKey">
+            <xs:selector xpath="f1:Team/f1:Drivers/f1:Driver"/>
+            <xs:field xpath="f1:DriverNumber"/>
+        </xs:key>
+        
+        <xs:keyref name="DriverNumberRef" refer="f1:DriverNumberKey">
+            <xs:selector xpath="f1:Team/f1:Drivers/f1:Driver"/>
+            <xs:field xpath="f1:DriverNumber"/>
+        </xs:keyref>
+    </xs:element>
+
+
+    <xs:complexType name="F1Type">
+        <xs:sequence>
+            <xs:element type="f1:TeamType" name="Team" maxOccurs="unbounded" minOccurs="0"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TeamType">
+        <xs:sequence>
+            <xs:element type="f1:TeamNameType" name="TeamName"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+            <xs:element type="xs:anyURI" name="Logo"/>
+            <xs:element type="f1:DriversType" name="Drivers"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+            <xs:element type="f1:CarsType" name="Cars" xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+            <xs:element type="f1:TeamBaseType" name="TeamBase"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+            <xs:element type="f1:TeamPrincipalType" name="TeamPrincipal"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+            <xs:element type="f1:TechnicalDirectorType" name="TechnicalDirector"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+            <xs:element type="xs:string" name="MainSponsor" default="None"/>
+            <xs:element type="xs:short" name="Founded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TeamNameType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:byte" name="ConstructorChampionsWon" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="DriversType">
+        <xs:sequence>
+            <xs:element type="f1:DriverType" name="Driver" maxOccurs="unbounded" minOccurs="0"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"> </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DriverType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="f1:FirstNameType" name="FirstName"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+            <xs:element type="xs:string" name="MiddleName"/>
+            <xs:element type="f1:NotEmptyString" name="LastName"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+            <xs:element type="f1:NotEmptyString" name="Nationality"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+            <xs:element type="f1:DriverNumberType" name="DriverNumber"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+            <xs:element type="xs:nonNegativeInteger" name="RaceWins"/>
+            <xs:element type="xs:nonNegativeInteger" name="RaceEntries"/>
+            <xs:element type="f1:PointsType" name="Points"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+            <xs:element type="xs:nonNegativeInteger" name="Podiums"/>
+            <xs:element type="xs:nonNegativeInteger" name="PolePositions"/>
+            <xs:element type="xs:nonNegativeInteger" name="FastestLaps"/>
+            <xs:element type="f1:DateOfBirthType" name="DateOfBirth"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+        </xs:choice>
+        <xs:attribute type="xs:nonNegativeInteger" name="ChampionshipsWon" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="FirstNameType">
+        <xs:simpleContent>
+            <xs:extension base="f1:NotEmptyString" xmlns:f1="http://FormulaTeamsStua05.com/F1">
+                <xs:attribute type="xs:string" name="Title" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="NotEmptyString">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="DriverNumberType">
+        <xs:restriction base="xs:nonNegativeInteger">
+            <xs:minInclusive value="1"/>
+            <xs:maxInclusive value="99"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="PointsType">
+        <xs:restriction base="xs:float">
+            <xs:minInclusive value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="DateOfBirthType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="1[0-9]{3}|20[0-2][0-4]"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="CarsType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="CarModel"/>
+            <xs:element type="xs:string" name="Livery"/>
+            <xs:element type="f1:EngineSupplierType" name="EngineSupplier" minOccurs="0"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TeamBaseType">
+        <xs:sequence>
+            <xs:element type="f1:CountryType" name="Country"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+            <xs:element type="xs:string" name="City"/>
+            <xs:element type="xs:string" name="Street"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="CountryType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Italy"/>
+            <xs:enumeration value="United Kingdom"/>
+            <xs:enumeration value="Switzerland"/>
+            <xs:enumeration value="USA"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="EngineSupplierType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Honda"/>
+            <xs:enumeration value="Mercedes"/>
+            <xs:enumeration value="Ferrari"/>
+            <xs:enumeration value="Renault"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="TeamPrincipalType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="f1:FirstNameType" name="FirstName"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+            <xs:element type="f1:NotEmptyString" name="LastName"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+            <xs:element type="xs:string" name="MiddleName"/>
+        </xs:choice>
+        <xs:attribute type="xs:string" name="Title" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="TechnicalDirectorType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element type="f1:FirstNameType" name="FirstName"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+            <xs:element type="f1:NotEmptyString" name="LastName"
+                xmlns:f1="http://FormulaTeamsStua05.com/F1"/>
+            <xs:element type="xs:string" name="MiddleName"/>
+        </xs:choice>
+        <xs:attribute type="xs:string" name="Title" use="optional"/>
+    </xs:complexType>
+
+
+
+
+</xs:schema>
